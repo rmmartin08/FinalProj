@@ -45,27 +45,34 @@
     <header id="header" class="fixed-top">
         <div class="container d-flex align-items-center">
             <a class="logo mr-auto" href="@Url.Action("Home", "Index")"><img src="~/Content/assets/img/logo.png" alt="company logo" class="img-fluid"></a>
-
             <nav class="nav-menu d-none d-lg-block">
                 <ul>
-                    <li class="active">@Html.ActionLink("Home", "Index","Home")</li>
-                    <li>@Html.ActionLink("Courses", "Index","Courses")</li>
-                    <li>@Html.ActionLink("Course Completion", "Index","CourseCompletions")</li>
-                    <li>@Html.ActionLink("Lessons", "Index","Lessons")</li>
-                    <li>@Html.ActionLink("User Details", "Index","UserDetails")</li>
-                    <li>@Html.ActionLink("Lesson Views", "Index","LessonViews")</li>
+                    <li class="active">@Html.ActionLink("Home", "Index", "Home")</li>
+                    @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("Employee"))
+                    {
+                            <li>@Html.ActionLink("Courses", "Index", "Courses")</li>
+                        <li>@Html.ActionLink("Lessons", "Index", "Lessons")</li>
+                            if (User.IsInRole("Admin"))
+                            {
+                                <li>@Html.ActionLink("Course Completion", "Index", "CourseCompletions")</li>
+                                <li>@Html.ActionLink("User Details", "Index", "UserDetails")</li>
+                                <li>@Html.ActionLink("Lesson Views", "Index", "LessonViews")</li>
+                            }
+                    }
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
                     @Html.Partial("_LoginPartial")
 
                 </ul>
-            </nav><!-- .nav-menu -->
-
-            <a href="#about" class="get-started-btn">Get Started</a>
-
+            </nav>
         </div>
     </header><!-- End Header -->
 
     <main id="main">
-
+        @if (ViewBag.Home == "y")
+        {
+            @Html.Partial("_Jumbo")
+        }
         <section class="mainContent">
             @RenderBody()
         </section>
@@ -74,14 +81,9 @@
     <!-- ======= Footer ======= -->
     <footer id="footer">
         <div class="container">
-            <div class="copyright">
-                &copy; Copyright <strong><span>Multi</span></strong>. All Rights Reserved
-            </div>
+
             <div class="credits">
-                <!-- All the links in the footer should remain intact. -->
-                <!-- You can delete the links only if you purchased the pro version. -->
-                <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/multi-responsive-bootstrap-template/ -->
+                &copy; Copyright <strong><span>Multi</span></strong>. All Rights Reserved
                 Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> Converted to MVC by Ryan Martin
             </div>
         </div>

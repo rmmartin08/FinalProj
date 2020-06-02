@@ -106,6 +106,12 @@ namespace FinalProj.DATA
         {
             get { return FirstName + " " + LastName; }
         }
+
+        public static string GetUserFirstName(string userid)
+        {
+            LMSEntities db = new LMSEntities();
+            return db.UserDetails.Where(u => u.UserId == userid).FirstOrDefault().FirstName;
+        }
     }
 
     public class UserDetailMetadata
@@ -121,4 +127,5 @@ namespace FinalProj.DATA
         public string LastName { get; set; }
     }
 
+    
 }

@@ -15,6 +15,7 @@ namespace FinalProj.UI.MVC.Controllers
         private LMSEntities db = new LMSEntities();
 
         // GET: Lessons
+        [Authorize(Roles = "Admin, Manager, Employee")]
         public ActionResult Index()
         {
             var lessons = db.Lessons.Include(l => l.Course);
@@ -22,6 +23,7 @@ namespace FinalProj.UI.MVC.Controllers
         }
 
         // GET: Lessons/Details/5
+        [Authorize(Roles = "Admin, Manager, Employee")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -37,6 +39,7 @@ namespace FinalProj.UI.MVC.Controllers
         }
 
         // GET: Lessons/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             ViewBag.CourseId = new SelectList(db.Courses, "CourseId", "CourseName");
@@ -48,6 +51,7 @@ namespace FinalProj.UI.MVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Create([Bind(Include = "LessonId,LessonTitle,CourseId,Introduction,VideoURL,PdfFilename,isActive")] Lesson lesson)
         {
             if (ModelState.IsValid)
@@ -62,6 +66,7 @@ namespace FinalProj.UI.MVC.Controllers
         }
 
         // GET: Lessons/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -82,6 +87,7 @@ namespace FinalProj.UI.MVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit([Bind(Include = "LessonId,LessonTitle,CourseId,Introduction,VideoURL,PdfFilename,isActive")] Lesson lesson)
         {
             if (ModelState.IsValid)
@@ -95,6 +101,7 @@ namespace FinalProj.UI.MVC.Controllers
         }
 
         // GET: Lessons/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -112,6 +119,7 @@ namespace FinalProj.UI.MVC.Controllers
         // POST: Lessons/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteConfirmed(int id)
         {
             Lesson lesson = db.Lessons.Find(id);

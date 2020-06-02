@@ -11,7 +11,8 @@ namespace FinalProj.DATA
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.Linq;
+
     public partial class AspNetUser
     {
         public string Id { get; set; }
@@ -28,5 +29,6 @@ namespace FinalProj.DATA
         public string UserName { get; set; }
     
         public virtual UserDetail UserDetail { get; set; }
+
     }
 }

@@ -10,11 +10,14 @@ using FinalProj.DATA;
 
 namespace FinalProj.UI.MVC.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class LessonViewsController : Controller
     {
         private LMSEntities db = new LMSEntities();
 
         // GET: LessonViews
+        [OverrideAuthorization]
+        [Authorize(Roles ="Admin, Manager, Employee")]
         public ActionResult Index()
         {
             var lessionViews = db.LessionViews.Include(l => l.Lesson).Include(l => l.UserDetail);

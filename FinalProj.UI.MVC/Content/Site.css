@@ -1,6 +1,5 @@
 ﻿body {
     padding-top: 50px;
-    padding-bottom: 20px;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -42,5 +41,15 @@ input[type="checkbox"].input-validation-error {
 }
 
 .mainContent{
-    padding: 82px 0 1% 0;
+    padding: 82px 5% 1% 5%;
+    min-height: 85vh;
+}
+
+.complete{
+    background-color: rgba(59, 170, 12, 0.65);
+    color: azure;
+}
+
+.lesson > td{
+    padding-left: 2rem !important;
 }

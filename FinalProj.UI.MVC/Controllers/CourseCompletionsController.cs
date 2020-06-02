@@ -10,11 +10,14 @@ using FinalProj.DATA;
 
 namespace FinalProj.UI.MVC.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CourseCompletionsController : Controller
     {
         private LMSEntities db = new LMSEntities();
 
         // GET: CourseCompletions
+        [OverrideAuthentication]
+        [Authorize(Roles ="Admin, Manager, Employee")]
         public ActionResult Index()
         {
             var courseCompletions = db.CourseCompletions.Include(c => c.Course).Include(c => c.UserDetail);

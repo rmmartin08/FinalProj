@@ -10,11 +10,13 @@ using FinalProj.DATA;
 
 namespace FinalProj.UI.MVC.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UserDetailsController : Controller
     {
         private LMSEntities db = new LMSEntities();
 
         // GET: UserDetails
+        [AllowAnonymous]
         public ActionResult Index()
         {
             var userDetails = db.UserDetails.Include(u => u.AspNetUser);

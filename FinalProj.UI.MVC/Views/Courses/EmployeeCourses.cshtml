@@ -1,0 +1,117 @@
+﻿@model IEnumerable<FinalProj.DATA.Course>
+@using FinalProj.DATA
+@using Microsoft.AspNet.Identity
+
+@{
+    LMSEntities db = new LMSEntities();
+    string userId = User.Identity.GetUserId();
+    List<CourseCompletion> completedCourseId = db.CourseCompletions.Where(cc => cc.UserId == userId).ToList();
+    List<Course> completedCourses = new List<Course>();
+    List<Course> incompleteCourses = new List<Course>();
+
+    foreach (var course in Model)
+    {
+        if (completedCourseId.Count() > 0)
+        {
+            foreach (var completion in completedCourseId)
+            {
+                if (course.CourseId == completion.CourseId)
+                {
+                    completedCourses.Add(course);
+                }
+                else
+                {
+                    if (course.IsActive == true)
+                    {
+                        incompleteCourses.Add(course);
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (course.IsActive == true)
+            {
+                incompleteCourses.Add(course);
+            }
+        }
+    }
+}
+<br />
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CourseName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CourseDescription)
+        </th>
+    </tr>
+
+    @foreach (var item in incompleteCourses)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CourseName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CourseDescription)
+            </td>
+        </tr>
+        List<Lesson> lessons = db.Lessons.Where(l => l.CourseId == item.CourseId && l.isActive == true).OrderBy(l => l.LessonTitle).ToList();
+        List<int> completedLessons = db.LessionViews.Where(lc => lc.Lesson.CourseId == item.CourseId).Select(lc => lc.LessonId).ToList();
+        foreach (var lesson in lessons)
+        {
+
+            if (completedLessons.Contains(lesson.LessonId))
+            {
+        <tr class="lesson complete">
+                <td>
+                Lesson: @lesson.LessonTitle - Completed
+                </td><td></td>
+            </tr>
+            }
+            else
+            {
+                <tr class="lesson">
+                <td>
+                    Lesson: @lesson.LessonTitle
+                </td><td></td>
+                    </tr>
+            }
+        }
+    }
+</table>
+<br /> <br />
+<h3>Completed Courses</h3>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CourseName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CourseDescription)
+        </th>
+    </tr>
+
+    @foreach (var item in completedCourses)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CourseName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CourseDescription)
+            </td>
+        </tr>
+        List<Lesson> lessons = db.Lessons.Where(l => l.CourseId == item.CourseId).OrderBy(l => l.LessonTitle).ToList();
+        foreach (var lesson in lessons)
+        {
+            <tr>
+                <td class="complete">
+                Lesson: @lesson.LessonTitle
+                </td>
+            </tr>
+        }
+    }
+</table>
