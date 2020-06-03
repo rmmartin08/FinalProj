@@ -1,8 +1,24 @@
 ﻿@model IEnumerable<FinalProj.DATA.Course>
+    @using FinalProj.DATA
 
 @{
     ViewBag.Title = "Courses";
 }
+
+@if (TempData["CourseConfirmation"] != null)
+{
+    <p class="alert alert-success text-center">
+        @TempData["CourseConfirmation"]
+    </p>
+}
+
+@if (TempData["Confirmation"] != null)
+{
+    <p class="alert alert-success text-center">
+        @TempData["Confirmation"]
+    </p>
+}
+
 
 <h2>@ViewBag.Title</h2>
 

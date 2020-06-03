@@ -16,8 +16,6 @@ namespace FinalProj.UI.MVC.Controllers
         private LMSEntities db = new LMSEntities();
 
         // GET: CourseCompletions
-        [OverrideAuthentication]
-        [Authorize(Roles ="Admin, Manager, Employee")]
         public ActionResult Index()
         {
             var courseCompletions = db.CourseCompletions.Include(c => c.Course).Include(c => c.UserDetail);
@@ -46,6 +44,7 @@ namespace FinalProj.UI.MVC.Controllers
             ViewBag.UserId = new SelectList(db.UserDetails, "UserId", "FirstName");
             return View();
         }
+
 
         // POST: CourseCompletions/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 

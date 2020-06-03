@@ -59,7 +59,7 @@
             </td>
         </tr>
         List<Lesson> lessons = db.Lessons.Where(l => l.CourseId == item.CourseId && l.isActive == true).OrderBy(l => l.LessonTitle).ToList();
-        List<int> completedLessons = db.LessionViews.Where(lc => lc.Lesson.CourseId == item.CourseId).Select(lc => lc.LessonId).ToList();
+        List<int> completedLessons = db.LessionViews.Where(lc => lc.Lesson.CourseId == item.CourseId && lc.UserId == userId).Select(lc => lc.LessonId).ToList();
         foreach (var lesson in lessons)
         {
 

@@ -7,6 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using FinalProj.DATA;
+using System.Net.Mail;
+using Microsoft.AspNet.Identity;
 
 namespace FinalProj.UI.MVC.Controllers
 {
@@ -16,8 +18,6 @@ namespace FinalProj.UI.MVC.Controllers
         private LMSEntities db = new LMSEntities();
 
         // GET: LessonViews
-        [OverrideAuthorization]
-        [Authorize(Roles ="Admin, Manager, Employee")]
         public ActionResult Index()
         {
             var lessionViews = db.LessionViews.Include(l => l.Lesson).Include(l => l.UserDetail);
@@ -49,13 +49,49 @@ namespace FinalProj.UI.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [OverrideAuthorization]
+        [Authorize(Roles = "Admin, Manager, Employee")]
         public ActionResult SystemCreate(int lessonId, string userId)
         {
             LessonView newLV = new LessonView();
             newLV.LessonId = lessonId;
             newLV.UserId = userId;
             newLV.DateViewed = DateTime.Now;
-            return View("EmployeeCourses", "Courses");
+            string lessonName = db.Lessons.Where(l => l.LessonId == lessonId).Select(l => l.LessonTitle).FirstOrDefault();
+            db.LessionViews.Add(newLV);
+            db.SaveChanges();
+            db.Entry(newLV).GetDatabaseValues();
+            TempData["Confirmation"] = $"{lessonName} has been Completed!";
+            int courseId = db.Lessons.Where(l => l.LessonId == lessonId).Select(l => l.CourseId).FirstOrDefault();
+            int lessonCompleteCount = db.LessionViews.Where(lv => lv.Lesson.CourseId == courseId).Count();
+            if (lessonCompleteCount == 6)
+            {
+                CourseCompletion newComplete = new CourseCompletion();
+                newComplete.UserId = userId;
+                newComplete.CourseId = courseId;
+                newComplete.DateCompleted = DateTime.Now;
+                db.CourseCompletions.Add(newComplete);
+                db.SaveChanges();
+                string courseName = db.Courses.Where(c => c.CourseId == courseId).Select(c => c.CourseName).FirstOrDefault();
+                TempData["CourseConfirmation"] = $"{courseName} has been Completed!";
+                string name = db.UserDetails.Where(u => u.UserId == userId).FirstOrDefault().FullName;
+                string message = $"Your employee {name} has completed {courseName} on {newComplete.DateCompleted:d}";
+                string managerEmail = "ryan.martin@vu.com";
+                string admin = "admin@ryanmichaelmartin.com";
+                MailMessage mm = new MailMessage(admin, managerEmail, $"Course Completed - {name}", message);
+                SmtpClient client = new SmtpClient("mail.ryanmichaelmartin.com");
+                client.Credentials = new NetworkCredential(admin, "Snake19(");
+                try
+                {
+                    client.Send(mm);
+                }
+                catch (Exception e)
+                {
+                    TempData["CourseConfirmation"] = $"Completion email failed to send. Please contact your administrator. <br /> Error Message: <br /> {e.StackTrace}";
+                    return RedirectToAction("Index", "Courses");
+                }
+            }
+            return RedirectToAction("Index", "Courses");
         }
 
         // POST: LessonViews/Create
