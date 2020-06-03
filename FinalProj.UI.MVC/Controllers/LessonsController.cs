@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -52,11 +53,19 @@ namespace FinalProj.UI.MVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult Create([Bind(Include = "LessonId,LessonTitle,CourseId,Introduction,VideoURL,PdfFilename,isActive")] Lesson lesson)
+        public ActionResult Create([Bind(Include = "LessonId,LessonTitle,CourseId,Introduction,VideoURL,PdfFilename,isActive")] Lesson lesson, HttpPostedFileBase fupPdf)
         {
             if (ModelState.IsValid)
             {
                 db.Lessons.Add(lesson);
+                if (fupPdf != null)
+                {
+                    string pdfName = Guid.NewGuid() + ".pdf";
+                    string folderPath = Server.MapPath("~/Content/assets/pdfs/") + pdfName;
+                    fupPdf.SaveAs(folderPath);
+                    lesson.PdfFilename = pdfName;
+                }
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -88,10 +97,23 @@ namespace FinalProj.UI.MVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult Edit([Bind(Include = "LessonId,LessonTitle,CourseId,Introduction,VideoURL,PdfFilename,isActive")] Lesson lesson)
+        public ActionResult Edit([Bind(Include = "LessonId,LessonTitle,CourseId,Introduction,VideoURL,PdfFilename,isActive")] Lesson lesson, HttpPostedFileBase fupPdf)
         {
             if (ModelState.IsValid)
             {
+                if (fupPdf != null)
+                {
+                    string path = Server.MapPath("~/Content/assets/pdfs/");
+                    if (lesson.PdfFilename != null)
+                    {
+                        FileInfo file = new FileInfo(path + lesson.PdfFilename);
+                        file.Delete();
+                    }
+                    string pdfName = Guid.NewGuid() + ".pdf";
+                    fupPdf.SaveAs(path + pdfName);
+                    lesson.PdfFilename = pdfName;
+
+                }
                 db.Entry(lesson).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

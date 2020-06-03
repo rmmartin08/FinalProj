@@ -65,18 +65,20 @@
 
             if (completedLessons.Contains(lesson.LessonId))
             {
-        <tr class="lesson complete">
-                <td>
-                Lesson: @lesson.LessonTitle - Completed
-                </td><td></td>
-            </tr>
+                <tr class="lesson complete">
+                    <td>
+                        Lesson: @lesson.LessonTitle - Completed
+                    </td>
+                    <td></td>
+                </tr>
             }
             else
             {
-                <tr class="lesson">
-                <td>
-                    Lesson: @lesson.LessonTitle
-                </td><td></td>
+                    <tr class="lesson clickable">
+                        <td>
+                            Lesson: @lesson.LessonTitle
+                        </td>
+                        <td>@Html.ActionLink("Details", "Details", "Lessons", new { Id = lesson.LessonId }, null)</td>
                     </tr>
             }
         }
@@ -109,7 +111,7 @@
         {
             <tr>
                 <td class="complete">
-                Lesson: @lesson.LessonTitle
+                    Lesson: @lesson.LessonTitle
                 </td>
             </tr>
         }

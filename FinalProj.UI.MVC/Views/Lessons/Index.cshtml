@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<FinalProj.DATA.Lesson>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Lessons";
 }
 
-<h2>Index</h2>
+<h2>@ViewBag.Title</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -44,7 +44,14 @@
             @Html.DisplayFor(modelItem => item.VideoURL)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.PdfFilename)
+            @if (item.PdfFilename != null)
+            {
+                <input type="checkbox" class="check-box" disabled="disabled" checked />
+            }
+            else
+            {
+                <input type="checkbox" class="check-box" disabled="disabled" />
+            }
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.isActive)

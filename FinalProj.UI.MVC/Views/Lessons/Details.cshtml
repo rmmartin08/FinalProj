@@ -1,23 +1,16 @@
 ﻿@model FinalProj.DATA.Lesson
+@using FinalProj.DATA
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Course = Model.Course.CourseName;
+    ViewBag.Title = Model.LessonTitle;
 }
-
-<h2>Details</h2>
+<h1>@ViewBag.Course</h1>
+<br />
+<h2>@ViewBag.Title</h2>
 
 <div>
-    <h4>Lesson</h4>
-    <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.LessonTitle)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.LessonTitle)
-        </dd>
-
         <dt>
             @Html.DisplayNameFor(model => model.Introduction)
         </dt>
@@ -26,41 +19,38 @@
             @Html.DisplayFor(model => model.Introduction)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.VideoURL)
-        </dt>
+        @if (Model.VideoURL != null)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.VideoURL)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.VideoURL)
+            </dd>
+        }
 
-        <dd>
-            @Html.DisplayFor(model => model.VideoURL)
-        </dd>
+        @if (Model.PdfFilename != null)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.PdfFilename)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.PdfFilename)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PdfFilename)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.isActive)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.isActive)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Course.CourseName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Course.CourseName)
-        </dd>
-
+            <dd>
+                @Html.DisplayFor(model => model.PdfFilename)
+            </dd>
+        }
     </dl>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.LessonId }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
+
+
+@using (Html.BeginForm("SystemCreate", "LessonViews", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+}

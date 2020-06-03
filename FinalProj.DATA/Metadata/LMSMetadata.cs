@@ -89,8 +89,8 @@ namespace FinalProj.DATA
         [StringLength(250, ErrorMessage = "Must be 250 Characters or Less")]
         public string VideoURL { get; set; }
 
-        [Display(Name = "Video URL")]
-        [StringLength(250, ErrorMessage = "Must be 250 Characters or Less")]
+        [Display(Name = "Pdf")]
+        [StringLength(100, ErrorMessage = "Must be 100 Characters or Less")]
         public string PdfFilename { get; set; }
 
         [Display(Name = "Active?")]

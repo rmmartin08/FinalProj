@@ -47,6 +47,17 @@ namespace FinalProj.UI.MVC.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SystemCreate(int lessonId, string userId)
+        {
+            LessonView newLV = new LessonView();
+            newLV.LessonId = lessonId;
+            newLV.UserId = userId;
+            newLV.DateViewed = DateTime.Now;
+            return View("EmployeeCourses", "Courses");
+        }
+
         // POST: LessonViews/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.

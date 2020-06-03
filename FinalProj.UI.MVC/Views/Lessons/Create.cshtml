@@ -1,19 +1,16 @@
 ﻿@model FinalProj.DATA.Lesson
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "New Lesson";
 }
 
-<h2>Create</h2>
+<h2>@ViewBag.Title</h2>
 
-
-@using (Html.BeginForm()) 
+@using (Html.BeginForm("Create", "Lessons", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
-        <h4>Lesson</h4>
-        <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             @Html.LabelFor(model => model.LessonTitle, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -50,8 +47,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.PdfFilename, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.PdfFilename, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.PdfFilename, "", new { @class = "text-danger" })
+                <input type="file" name="fupPdf" accept=".pdf" />
             </div>
         </div>
 
