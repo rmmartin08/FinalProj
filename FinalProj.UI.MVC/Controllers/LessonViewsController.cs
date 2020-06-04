@@ -43,7 +43,7 @@ namespace FinalProj.UI.MVC.Controllers
         public ActionResult Create()
         {
             ViewBag.LessonId = new SelectList(db.Lessons, "LessonId", "LessonTitle");
-            ViewBag.UserId = new SelectList(db.UserDetails, "UserId", "FirstName");
+            ViewBag.UserId = new SelectList(db.UserDetails, "UserId", "FullName");
             return View();
         }
 
@@ -109,7 +109,7 @@ namespace FinalProj.UI.MVC.Controllers
             }
 
             ViewBag.LessonId = new SelectList(db.Lessons, "LessonId", "LessonTitle", lessonView.LessonId);
-            ViewBag.UserId = new SelectList(db.UserDetails, "UserId", "FirstName", lessonView.UserId);
+            ViewBag.UserId = new SelectList(db.UserDetails, "UserId", "FullName", lessonView.UserId);
             return View(lessonView);
         }
 
@@ -126,7 +126,7 @@ namespace FinalProj.UI.MVC.Controllers
                 return HttpNotFound();
             }
             ViewBag.LessonId = new SelectList(db.Lessons, "LessonId", "LessonTitle", lessonView.LessonId);
-            ViewBag.UserId = new SelectList(db.UserDetails, "UserId", "FirstName", lessonView.UserId);
+            ViewBag.UserId = new SelectList(db.UserDetails, "UserId", "FullName", lessonView.UserId);
             return View(lessonView);
         }
 
@@ -144,7 +144,7 @@ namespace FinalProj.UI.MVC.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.LessonId = new SelectList(db.Lessons, "LessonId", "LessonTitle", lessonView.LessonId);
-            ViewBag.UserId = new SelectList(db.UserDetails, "UserId", "FirstName", lessonView.UserId);
+            ViewBag.UserId = new SelectList(db.UserDetails, "UserId", "FullName", lessonView.UserId);
             return View(lessonView);
         }
 

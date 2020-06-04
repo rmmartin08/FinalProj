@@ -125,6 +125,12 @@ namespace FinalProj.DATA
         [Required(ErrorMessage = "*Required")]
         [StringLength(200, ErrorMessage = "Must be 200 Characters or Less")]
         public string LastName { get; set; }
+
+
+        [Display(Name = "Manager")]
+        [Required(ErrorMessage = "*Required")]
+        [StringLength(128, ErrorMessage = "Must be 128 Characters or Less")]
+        public string ManagerId { get; set; }
     }
 
     

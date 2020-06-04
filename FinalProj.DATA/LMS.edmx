@@ -39,6 +39,7 @@
           <Property Name="CourseName" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="CourseDescription" Type="varchar" MaxLength="500" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="LessonsInCourse" Type="int" />
         </EntityType>
         <EntityType Name="Lessons">
           <Key>
@@ -68,6 +69,7 @@
           <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="LastName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ManagerId" Type="nvarchar" MaxLength="128" />
         </EntityType>
         <Association Name="FK_CourseCompletion_Courses">
           <End Role="Courses" Type="Self.Courses" Multiplicity="1" />
@@ -141,6 +143,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_UserDetails_UserDetails">
+          <End Role="UserDetails" Type="Self.UserDetails" Multiplicity="0..1" />
+          <End Role="UserDetails1" Type="Self.UserDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserDetails">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UserDetails1">
+              <PropertyRef Name="ManagerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="LMSModelStoreContainer">
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CourseCompletion" EntityType="Self.CourseCompletion" Schema="dbo" store:Type="Tables" />
@@ -171,6 +185,10 @@
           <AssociationSet Name="FK_UserDetails_AspNetUsers" Association="Self.FK_UserDetails_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="UserDetails" EntitySet="UserDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserDetails_UserDetails" Association="Self.FK_UserDetails_UserDetails">
+            <End Role="UserDetails" EntitySet="UserDetails" />
+            <End Role="UserDetails1" EntitySet="UserDetails" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -216,6 +234,7 @@
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="CourseCompletions" Relationship="Self.FK_CourseCompletion_Courses" FromRole="Courses" ToRole="CourseCompletion" />
           <NavigationProperty Name="Lessons" Relationship="Self.FK_Lessons_Courses" FromRole="Courses" ToRole="Lessons" />
+          <Property Name="LessonsInCourse" Type="Int32" />
         </EntityType>
         <EntityType Name="LessonView">
           <Key>
@@ -240,7 +259,7 @@
           <Property Name="PdfFilename" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="isActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Course" Relationship="Self.FK_Lessons_Courses" FromRole="Lessons" ToRole="Courses" />
-          <NavigationProperty Name="LessionViews" Relationship="Self.FK_LessionViews_Lessons" FromRole="Lessons" ToRole="LessionViews" />
+          <NavigationProperty Name="LessonViews" Relationship="Self.FK_LessionViews_Lessons" FromRole="Lessons" ToRole="LessionViews" />
         </EntityType>
         <EntityType Name="UserDetail">
           <Key>
@@ -252,6 +271,9 @@
           <NavigationProperty Name="AspNetUser" Relationship="Self.FK_UserDetails_AspNetUsers" FromRole="UserDetails" ToRole="AspNetUsers" />
           <NavigationProperty Name="CourseCompletions" Relationship="Self.FK_CourseCompletion_UserDetails" FromRole="UserDetails" ToRole="CourseCompletion" />
           <NavigationProperty Name="LessionViews" Relationship="Self.FK_LessionViews_UserDetails" FromRole="UserDetails" ToRole="LessionViews" />
+          <Property Name="ManagerId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserDetails1" Relationship="LMSModel.FK_UserDetails_UserDetails" FromRole="UserDetail" ToRole="UserDetail1" />
+          <NavigationProperty Name="UserDetail1" Relationship="LMSModel.FK_UserDetails_UserDetails" FromRole="UserDetail1" ToRole="UserDetail" />
         </EntityType>
         <Association Name="FK_UserDetails_AspNetUsers">
           <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1" />
@@ -356,7 +378,23 @@
             <End Role="UserDetails" EntitySet="UserDetails" />
             <End Role="LessionViews" EntitySet="LessionViews" />
           </AssociationSet>
+          <AssociationSet Name="FK_UserDetails_UserDetails" Association="LMSModel.FK_UserDetails_UserDetails">
+            <End Role="UserDetail" EntitySet="UserDetails" />
+            <End Role="UserDetail1" EntitySet="UserDetails" />
+          </AssociationSet>
         </EntityContainer>
+        <Association Name="FK_UserDetails_UserDetails">
+          <End Type="LMSModel.UserDetail" Role="UserDetail" Multiplicity="0..1" />
+          <End Type="LMSModel.UserDetail" Role="UserDetail1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserDetail">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UserDetail1">
+              <PropertyRef Name="ManagerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -394,6 +432,7 @@
           <EntitySetMapping Name="Courses">
             <EntityTypeMapping TypeName="LMSModel.Course">
               <MappingFragment StoreEntitySet="Courses">
+                <ScalarProperty Name="LessonsInCourse" ColumnName="LessonsInCourse" />
                 <ScalarProperty Name="CourseId" ColumnName="CourseId" />
                 <ScalarProperty Name="CourseName" ColumnName="CourseName" />
                 <ScalarProperty Name="CourseDescription" ColumnName="CourseDescription" />
@@ -417,6 +456,7 @@
           <EntitySetMapping Name="UserDetails">
             <EntityTypeMapping TypeName="LMSModel.UserDetail">
               <MappingFragment StoreEntitySet="UserDetails">
+                <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />

@@ -18,12 +18,14 @@ namespace FinalProj.DATA
         public UserDetail()
         {
             this.CourseCompletions = new HashSet<CourseCompletion>();
-            this.LessonViews = new HashSet<LessonView>();
+            this.LessionViews = new HashSet<LessonView>();
+            this.UserDetails1 = new HashSet<UserDetail>();
         }
     
         public string UserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string ManagerId { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -31,6 +33,7 @@ namespace FinalProj.DATA
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LessonView> LessionViews { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<LessonView> LessonViews { get; set; }
+        public virtual ICollection<UserDetail> UserDetails1 { get; set; }
+        public virtual UserDetail UserDetail1 { get; set; }
     }
 }

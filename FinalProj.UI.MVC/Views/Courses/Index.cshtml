@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<FinalProj.DATA.Course>
-    @using FinalProj.DATA
+@using FinalProj.DATA
 
 @{
     ViewBag.Title = "Courses";
@@ -19,8 +19,9 @@
     </p>
 }
 
-
 <h2>@ViewBag.Title</h2>
+
+
 
 @if (!User.IsInRole("Admin"))
 {
@@ -69,4 +70,3 @@ else
     </table>
 
 }
-

@@ -3,44 +3,53 @@
 @using Microsoft.AspNet.Identity;
 
 @{
-    ViewBag.Course = Model.Course.CourseName;
-    ViewBag.Title = Model.LessonTitle;
+                /**/
+
+                ViewBag.Course = Model.Course.CourseName;
+                ViewBag.Title = Model.LessonTitle;
 }
 <h1>@ViewBag.Course</h1>
 <br />
 <h2>@ViewBag.Title</h2>
 
 <div>
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Introduction)
-        </dt>
+    @if (Model.Introduction != null)
+    {
+    <h3>
+        @Html.DisplayNameFor(model => model.Introduction)
+    </h3>
 
-        <dd>
-            @Html.DisplayFor(model => model.Introduction)
-        </dd>
 
-        @if (Model.VideoURL != null)
-        {
-            <dt>
-                @Html.DisplayNameFor(model => model.VideoURL)
-            </dt>
-            <dd>
-                
-            </dd>
-        }
+    @Html.DisplayFor(model => model.Introduction)
 
-        @if (Model.PdfFilename != null)
-        {
-            <dt>
-                @Html.DisplayNameFor(model => model.PdfFilename)
-            </dt>
+    }
+    <br />
+    @if (Model.VideoURL != null)
+    {
+        <div class="player">
+            <video class="player__video viewer" src="~/Content/assets/Video/652333414.mp4"></video>
+            <div class="player__button toggle activePause">
+                <div id="play__button" class="toggle button"></div>
 
-            <dd>
-                <a href="~/Content/assets/pdfs/@Model.PdfFilename"></a>
-            </dd>
-        }
-    </dl>
+            </div>
+            <div class="player__controls">
+                <div class="progress">
+                    <div class="progress__filled"></div>
+                </div>
+                <div class="playerButtons">
+                    <div class="videoTitle"></div>
+                    <div class="volume">Volume <input type="range" name="volume" class="player__slider" min="0" max="1" step="0.05" value="1"></div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.PdfFilename != null)
+    {
+        <h3>
+            Download and review <a href="~/Content/assets/pdfs/@Model.PdfFilename">this file</a> to complete this lesson
+        </h3>
+    }
 </div>
 
 
@@ -51,9 +60,68 @@
     @Html.Hidden("lessonId", Model.LessonId);
     @Html.Hidden("userId", User.Identity.GetUserId());
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input id="completeButton" type="submit" value="Complete" class="btn btn-default" @*style="display: none"*@ />
         </div>
+    </div>
+}
+
+@section scripts{
+    <script>
+        const player = document.querySelector('.player');
+        const video = player.querySelector('.viewer');
+        const progress = player.querySelector('.progress');
+        const progressBar = player.querySelector('.progress__filled');
+        const toggle = player.querySelector('.toggle');
+        const ranges = player.querySelectorAll('.player__slider');
+        const fullPlay = document.querySelector('.player__button');
+        const play = document.querySelector('#play__button');
+        //const pause = document.querySelector('#pause__button');
+        const videoTitle = document.querySelector('.videoTitle');
+        const none = 'none';
+        
+        fullPlay.style.display = none;
+
+        
+        function togglePlay() {
+            video[video.paused ? 'play' : 'pause']();
+        }
+
+        function updateButton() {
+            const state = video.paused ? 'y' : 'n';
+            if (this.paused) {
+                fullPlay.style.display = 'unset';
+                fullPlay.classList.add('activePause')
+                play.style.display = 'unset';                
+                play.classList.add('activePause')
+            } else {
+                fullPlay.style.display = none;
+                fullPlay.classList.remove('activePause')
+                play.classList.remove('activePause')
+            }
+
+        }
+
+
+
+        function handleRangeUpdate() {
+            video[this.name] = this.value;
+        }
+
+        function handleProgress() {
+            const percent = (video.currentTime / video.duration) * 100;
+            progressBar.style.flexBasis = `${percent}%`;
+        }
+
+        video.addEventListener('click', togglePlay);
+        video.addEventListener('play', updateButton);
+        video.addEventListener('fullPlay', updateButton);
+        video.addEventListener('timeupdate', handleProgress);
+        toggle.addEventListener('click', togglePlay);
+        ranges.forEach(range => range.addEventListener('change', handleRangeUpdate));
+        ranges.forEach(range => range.addEventListener('mousemove', handleRangeUpdate));
+
+    </script>
+
 }

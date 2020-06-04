@@ -41,7 +41,7 @@ namespace FinalProj.UI.MVC.Controllers
         public ActionResult Create()
         {
             ViewBag.CourseId = new SelectList(db.Courses, "CourseId", "CourseName");
-            ViewBag.UserId = new SelectList(db.UserDetails, "UserId", "FirstName");
+            ViewBag.UserId = new SelectList(db.UserDetails, "UserId", "FullName");
             return View();
         }
 
@@ -61,7 +61,7 @@ namespace FinalProj.UI.MVC.Controllers
             }
 
             ViewBag.CourseId = new SelectList(db.Courses, "CourseId", "CourseName", courseCompletion.CourseId);
-            ViewBag.UserId = new SelectList(db.UserDetails, "UserId", "FirstName", courseCompletion.UserId);
+            ViewBag.UserId = new SelectList(db.UserDetails, "UserId", "FullName", courseCompletion.UserId);
             return View(courseCompletion);
         }
 
@@ -78,7 +78,7 @@ namespace FinalProj.UI.MVC.Controllers
                 return HttpNotFound();
             }
             ViewBag.CourseId = new SelectList(db.Courses, "CourseId", "CourseName", courseCompletion.CourseId);
-            ViewBag.UserId = new SelectList(db.UserDetails, "UserId", "FirstName", courseCompletion.UserId);
+            ViewBag.UserId = new SelectList(db.UserDetails, "UserId", "FullName", courseCompletion.UserId);
             return View(courseCompletion);
         }
 
@@ -96,7 +96,7 @@ namespace FinalProj.UI.MVC.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.CourseId = new SelectList(db.Courses, "CourseId", "CourseName", courseCompletion.CourseId);
-            ViewBag.UserId = new SelectList(db.UserDetails, "UserId", "FirstName", courseCompletion.UserId);
+            ViewBag.UserId = new SelectList(db.UserDetails, "UserId", "FullName", courseCompletion.UserId);
             return View(courseCompletion);
         }
 

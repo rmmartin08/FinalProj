@@ -8,6 +8,9 @@
     List<CourseCompletion> completedCourseId = db.CourseCompletions.Where(cc => cc.UserId == userId).ToList();
     List<Course> completedCourses = new List<Course>();
     List<Course> incompleteCourses = new List<Course>();
+    int totalLessons = 0;
+    int completeTotal = 0;
+    int completePercentage = 0;
 
     foreach (var course in Model)
     {
@@ -38,82 +41,99 @@
     }
 }
 <br />
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.CourseName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CourseDescription)
-        </th>
-    </tr>
-
-    @foreach (var item in incompleteCourses)
-    {
+<br />
+<h4>Incomplete Courses</h4>
+<div class="col-md-11 autoMargin">
+    <table class="table">
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CourseName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CourseDescription)
-            </td>
+            <th>
+                @Html.DisplayNameFor(model => model.CourseName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CourseDescription)
+            </th>
         </tr>
-        List<Lesson> lessons = db.Lessons.Where(l => l.CourseId == item.CourseId && l.isActive == true).OrderBy(l => l.LessonTitle).ToList();
-        List<int> completedLessons = db.LessionViews.Where(lc => lc.Lesson.CourseId == item.CourseId && lc.UserId == userId).Select(lc => lc.LessonId).ToList();
-        foreach (var lesson in lessons)
-        {
 
-            if (completedLessons.Contains(lesson.LessonId))
+        @foreach (var item in incompleteCourses)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseDescription)
+                </td>
+            </tr>
+            List<Lesson> lessons = db.Lessons.Where(l => l.CourseId == item.CourseId && l.isActive == true).OrderBy(l => l.LessonTitle).ToList();
+            List<int> completedLessons = db.LessionViews.Where(lc => lc.Lesson.CourseId == item.CourseId && lc.UserId == userId).Select(lc => lc.LessonId).ToList();
+            foreach (var lesson in lessons)
             {
-                <tr class="lesson complete">
-                    <td>
-                        Lesson: @lesson.LessonTitle - Completed
-                    </td>
-                    <td></td>
-                </tr>
-            }
-            else
-            {
+                totalLessons += 1;
+                if (completedLessons.Contains(lesson.LessonId))
+                {
+
+                    <tr class="lesson complete">
+                        <td>
+                            Lesson: @lesson.LessonTitle - Completed
+                        </td>
+                        <td></td>
+                    </tr>
+                    completeTotal += 1;
+                }
+                else
+                {
                     <tr class="lesson clickable">
                         <td>
                             Lesson: @lesson.LessonTitle
                         </td>
                         <td>@Html.ActionLink("Details", "Details", "Lessons", new { Id = lesson.LessonId }, null)</td>
                     </tr>
+                }
             }
         }
-    }
-</table>
-<br /> <br />
-<h3>Completed Courses</h3>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.CourseName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CourseDescription)
-        </th>
-    </tr>
+    </table>
+</div>
+@{ 
+    completeTotal *= 100;
+    completePercentage = completeTotal / totalLessons;
+}
+<br />
+    <br />
+    <div class="row">
+        <h3 class="autoMargin">Overall Progress:</h3>
+        <div class="col-md-8 progBar">
+            <div class="studProg" style="width: @completePercentage%;">
+            </div>
+        </div>
+    </div>
 
-    @foreach (var item in completedCourses)
-    {
+<br />
+<br />
+<h4>Completed Courses</h4>
+<div class="col-md-11 autoMargin">
+    <table class="table">
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CourseName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CourseDescription)
-            </td>
+            <th>
+                @Html.DisplayNameFor(model => model.CourseName)
+            </th>
         </tr>
-        List<Lesson> lessons = db.Lessons.Where(l => l.CourseId == item.CourseId).OrderBy(l => l.LessonTitle).ToList();
-        foreach (var lesson in lessons)
+
+        @foreach (var item in completedCourses)
         {
-            <tr>
-                <td class="complete">
-                    Lesson: @lesson.LessonTitle
+            <tr class="complete">
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseName)
                 </td>
             </tr>
+            List<Lesson> lessons = db.Lessons.Where(l => l.CourseId == item.CourseId).OrderBy(l => l.LessonTitle).ToList();
+            foreach (var lesson in lessons)
+            {
+                <tr class="lesson complete complete-course">
+                    <td>
+                        Lesson: @lesson.LessonTitle
+                    </td>
+                </tr>
+            }
         }
-    }
-</table>
+    </table>
+</div>

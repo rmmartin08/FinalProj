@@ -12,11 +12,19 @@
         <EntityTypeShape EntityType="LMSModel.Lesson" Width="1.5" PointX="3" PointY="8.375" IsExpanded="true" />
         <EntityTypeShape EntityType="LMSModel.UserDetail" Width="1.5" PointX="3" PointY="3.75" IsExpanded="true" />
         <AssociationConnector Association="LMSModel.FK_UserDetails_AspNetUsers" ManuallyRouted="false" />
-        <AssociationConnector Association="LMSModel.FK_CourseCompletion_Courses" ManuallyRouted="false" />
+        <AssociationConnector Association="LMSModel.FK_CourseCompletion_Courses" ManuallyRouted="true" >
+          <ConnectorPoint PointX="2.25" PointY="8.6261528461538468" />
+          <ConnectorPoint PointX="2.625" PointY="8.2511528461538468" />
+          <ConnectorPoint PointX="2.625" PointY="7.2931076519893674" />
+          <ConnectorPoint PointX="4.875" PointY="7.2931076519893674" />
+          <ConnectorPoint PointX="4.875" PointY="6.297587890625" />
+          <ConnectorPoint PointX="5.25" PointY="5.922587890625" />
+        </AssociationConnector>
         <AssociationConnector Association="LMSModel.FK_CourseCompletion_UserDetails" ManuallyRouted="false" />
         <AssociationConnector Association="LMSModel.FK_Lessons_Courses" ManuallyRouted="false" />
         <AssociationConnector Association="LMSModel.FK_LessionViews_Lessons" ManuallyRouted="false" />
         <AssociationConnector Association="LMSModel.FK_LessionViews_UserDetails" ManuallyRouted="false" />
+        <AssociationConnector Association="LMSModel.FK_UserDetails_UserDetails" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
