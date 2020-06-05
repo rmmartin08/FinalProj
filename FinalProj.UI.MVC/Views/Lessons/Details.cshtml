@@ -3,8 +3,6 @@
 @using Microsoft.AspNet.Identity;
 
 @{
-                /**/
-
                 ViewBag.Course = Model.Course.CourseName;
                 ViewBag.Title = Model.LessonTitle;
 }
@@ -29,7 +27,7 @@
         <div class="player">
             <video class="player__video viewer" src="~/Content/assets/Video/652333414.mp4"></video>
             <div class="player__button toggle activePause">
-                <div id="play__button" class="toggle button"></div>
+                <div id="play__button" class="toggle button activePause"></div>
 
             </div>
             <div class="player__controls">
@@ -62,7 +60,7 @@
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input id="completeButton" type="submit" value="Complete" class="btn btn-default" @*style="display: none"*@ />
+            <input id="completeButton" type="submit" value="Complete" class="btn btn-default" style="display: none" />
         </div>
     </div>
 }
@@ -76,51 +74,40 @@
         const toggle = player.querySelector('.toggle');
         const ranges = player.querySelectorAll('.player__slider');
         const fullPlay = document.querySelector('.player__button');
-        const play = document.querySelector('#play__button');
-        //const pause = document.querySelector('#pause__button');
+        const play = document.getElementById('play__button');
         const videoTitle = document.querySelector('.videoTitle');
-        const none = 'none';
+        const finish = document.getElementById('completeButton');
         
-        fullPlay.style.display = none;
-
+        fullPlay.style.display = 'none';
+       
         
         function togglePlay() {
             video[video.paused ? 'play' : 'pause']();
-        }
-
-        function updateButton() {
-            const state = video.paused ? 'y' : 'n';
             if (this.paused) {
                 fullPlay.style.display = 'unset';
-                fullPlay.classList.add('activePause')
-                play.style.display = 'unset';                
-                play.classList.add('activePause')
+                fullPlay.classList.add('activePause');
+                play.style.display = 'unset';
+                play.classList.add('activePause');                     
             } else {
-                fullPlay.style.display = none;
-                fullPlay.classList.remove('activePause')
-                play.classList.remove('activePause')
+                fullPlay.style.display = 'none';
+                fullPlay.classList.remove('activePause');
+                play.classList.remove('activePause');
             }
-
-        }
-
-
-
-        function handleRangeUpdate() {
-            video[this.name] = this.value;
         }
 
         function handleProgress() {
             const percent = (video.currentTime / video.duration) * 100;
             progressBar.style.flexBasis = `${percent}%`;
+            if (percent == 100) {
+                finish.style.display = 'unset';
+            }
         }
 
         video.addEventListener('click', togglePlay);
-        video.addEventListener('play', updateButton);
-        video.addEventListener('fullPlay', updateButton);
+        fullPlay.addEventListener('click', togglePlay);
+        play.addEventListener('click', togglePlay);
         video.addEventListener('timeupdate', handleProgress);
         toggle.addEventListener('click', togglePlay);
-        ranges.forEach(range => range.addEventListener('change', handleRangeUpdate));
-        ranges.forEach(range => range.addEventListener('mousemove', handleRangeUpdate));
 
     </script>
 

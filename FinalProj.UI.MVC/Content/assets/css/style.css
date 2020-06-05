@@ -132,7 +132,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #header .logo img {
-  max-height: 40px;
+  max-height: 60px;
 }
 
 @media (max-width: 992px) {
@@ -413,15 +413,16 @@ h1, h2, h3, h4, h5, h6 {
   background-color: rgba(4, 12, 21, 0.5);
 }
 
-#hero .carousel-container {
-  display: flex;
-  align-items: center;
-  position: absolute;
-  bottom: 0;
-  top: 82px;
-  left: 50px;
-  right: 50px;
-}
+    #hero .carousel-container {
+        display: flex;
+        align-items: center;
+        position: absolute;
+        min-width: 100%;
+        min-height: 100%;
+        z-index: 100;
+        background-color: rgba(0, 0, 0, .6);
+        color: darkgray;
+    }
 
 #hero h2 {
   color: #fff;
@@ -540,11 +541,7 @@ h1, h2, h3, h4, h5, h6 {
   #hero {
     height: 100vh;
   }
-  #hero .carousel-container {
-    text-align: center;
-    top: 74px;
-  }
-}
+
 
 @media (max-width: 768px) {
   #hero h2 {
