@@ -15,7 +15,7 @@ namespace FinalProj.UI.MVC.Controllers
         private LMSEntities db = new LMSEntities();
 
         // GET: Courses
-        [Authorize(Roles ="Admin, Manager, Employee")]
+        [Authorize(Roles = "Admin, Manager, Employee")]
         public ActionResult Index()
         {
             return View(db.Courses.ToList().OrderBy(c => c.CourseName));
@@ -58,7 +58,6 @@ namespace FinalProj.UI.MVC.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
             return View(course);
         }
 
@@ -88,11 +87,49 @@ namespace FinalProj.UI.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
+                bool isActive = db.Courses.Where(c => c.CourseId == course.CourseId).Select(c => c.IsActive).FirstOrDefault();
+                if (course.IsActive != isActive)
+                {
+                    List<Lesson> allLessons = db.Lessons.Where(l => l.CourseId == course.CourseId).ToList();
+                    if (course.IsActive == false)
+                    {
+                        foreach (var lesson in allLessons)
+                        {
+                            if (lesson.isActive == true)
+                            {
+                                lesson.isActive = !lesson.isActive;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        db.Entry(course).State = EntityState.Modified;
+                        db.SaveChanges();
+                        ViewBag.CourseId = course.CourseId;
+                        return View("LessonsSelection");
+                    }
+                }
                 db.Entry(course).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(course);
+        }
+
+
+
+        [HttpPost]
+        public void UpdateActiveCourseLessons(List<int> list)
+        {
+            if (list[0] != 0)
+            {
+                foreach (var listItem in list)
+                {
+                    Lesson lesson = db.Lessons.Where(l => l.LessonId == listItem).FirstOrDefault();
+                    lesson.isActive = true;
+                    db.SaveChanges();
+                }
+            }
         }
 
         // GET: Courses/Delete/5

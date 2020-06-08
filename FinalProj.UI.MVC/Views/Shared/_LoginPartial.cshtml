@@ -2,9 +2,8 @@
 @using FinalProj.DATA
 @if (Request.IsAuthenticated)
 {
-    LMSEntities db = new LMSEntities();
     string userId = User.Identity.GetUserId();
-    string name = db.UserDetails.Where(u => u.UserId == userId).FirstOrDefault().FirstName;
+    string name = new LMSEntities().UserDetails.Where(u => u.UserId == userId).FirstOrDefault().FirstName;
     if (name == null)
     {
         name = "Friend";

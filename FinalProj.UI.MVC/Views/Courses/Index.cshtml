@@ -7,16 +7,21 @@
 
 @if (TempData["CourseConfirmation"] != null)
 {
-    <p class="alert alert-success text-center">
-        @TempData["CourseConfirmation"]
-    </p>
+<p id="courseComp" class="alert alert-success text-center" style="display: none;">
+    @TempData["CourseConfirmation"] 
+</p>
 }
-
 @if (TempData["Confirmation"] != null)
 {
-    <p class="alert alert-success text-center">
-        @TempData["Confirmation"]
-    </p>
+<p id="lessonComp" class="alert alert-success text-center" style="display: none;">
+    @TempData["Confirmation"]
+</p>
+}
+@if (TempData["Info"] != null)
+{
+<p id="lessonComp" class="alert alert-success text-center">
+    @TempData["Info"]
+</p>
 }
 
 <h2>@ViewBag.Title</h2>
@@ -68,5 +73,27 @@ else
         }
 
     </table>
+
+}
+
+
+@section Scripts
+{
+    <script>
+        if ($('#courseComp')) {
+            $('#courseComp').fadeIn('slow', function () {
+                $('#courseComp').delay(5000).fadeOut();
+            });
+            };
+
+        if ($('#lessonComp')) {
+            $('#lessonComp').fadeIn('slow', function () {
+                $('#lessonComp').delay(5000).fadeOut();
+            });
+        };
+
+    </script>
+
+
 
 }

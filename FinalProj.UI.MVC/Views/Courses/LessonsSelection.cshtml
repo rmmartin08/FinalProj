@@ -1,0 +1,54 @@
+﻿@using FinalProj.DATA
+
+@{
+    ViewBag.Title = "Select Lessons";
+    LMSEntities db = new LMSEntities();
+    int courseId = ViewBag.CourseId;
+    List<Lesson> lessons = db.Lessons.Where(l => l.CourseId == courseId).ToList();
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>Please select which couses you would like to activate</p>
+
+@foreach (var lesson in lessons)
+{
+    <input type="checkbox" name="@lesson.LessonId" value="@lesson.LessonId" /> @lesson.LessonTitle
+    <br />
+}
+
+<button type="submit" id="submit" class="btn btn-outline-secondary">Submit</button>
+@section Scripts{
+    
+    <script>
+        let list = [];
+        function ListItems() {
+            $('input[type=checkbox]:checked').each(function () {
+                var number = (this.checked ? $(this).val() : null);
+                list.push(number);
+            });
+            if (list.length == 0) {
+                list.push(0);
+            }
+            let data = {list: list}
+            $.ajax({
+                url: "http://localhost:50161/Courses/UpdateActiveCourseLessons",
+                method: 'POST',
+                data: data
+            }).done(function () {
+                window.location.href = "http://localhost:50161/Courses";
+            });
+
+        };
+
+        var button = document.getElementById('submit');
+        button.addEventListener('click', ListItems);
+        
+
+
+    </script>
+    
+    
+    
+    }
+
