@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<FinalProj.DATA.Course>
 @using FinalProj.DATA
+@using Microsoft.AspNet.Identity
 
 @{
     ViewBag.Title = "Courses";
@@ -15,12 +16,6 @@
 {
 <p id="lessonComp" class="alert alert-success text-center" style="display: none;">
     @TempData["Confirmation"]
-</p>
-}
-@if (TempData["Info"] != null)
-{
-<p id="lessonComp" class="alert alert-success text-center">
-    @TempData["Info"]
 </p>
 }
 
@@ -76,6 +71,18 @@ else
 
 }
 
+<section>
+    @{ 
+        List<UserDetail> managers  = new LMSEntities().UserDetails.Where(l => l.AspNetUser.AspNetUserRoles.AspNetRoles.Name = "Manager" }
+
+    <canvas id="pieCanvas"></canvas>
+
+
+</section>
+
+
+
+
 
 @section Scripts
 {
@@ -91,6 +98,30 @@ else
                 $('#lessonComp').delay(5000).fadeOut();
             });
         };
+
+        var canvas = $('#pieCanvas');
+        canvas.width = 300;
+        canvas.height = 300;
+        var ctx = canvas.getContext("2d");
+
+        function drawLine(ctx, startX, startY, endX, endY) {
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(endX, endY);
+            ctx.stroke();
+        }
+
+        function drawSlice(ctx, centerX, centerY, radius, startAngle, endAngle, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+
+
 
     </script>
 

@@ -1,7 +1,8 @@
 ﻿@model FinalProj.DATA.Course
-
+@using FinalProj.DATA
 @{
     ViewBag.Title = "Details";
+    List<Lesson> lessons = new LMSEntities().Lessons.Where(l => l.CourseId == Model.CourseId).ToList();
 }
 
 <h2>Details</h2>
@@ -33,7 +34,15 @@
         <dd>
             @Html.DisplayFor(model => model.IsActive)
         </dd>
-
+        <dt>
+            Lessons: 
+        </dt>
+        @foreach (var lesson in lessons)
+        {
+            <dd>
+                @lesson.LessonTitle - @(lesson.isActive ? "Active" : "Inactive")
+            </dd>
+        }
     </dl>
 </div>
 <p>
